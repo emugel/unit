@@ -1,0 +1,17 @@
+{
+  "name": "unit",
+  "license": "MIT",
+  "tags": [
+    "unit",
+    "test"
+  ],
+  "classPath": "src",
+  "contributors": [
+    "emugel"
+  ],
+  "releasenote": "from haxe 3",
+  "version": "1.0.0",
+  "url": "",
+  "dependencies": {
+  }
+}

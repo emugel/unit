@@ -80,10 +80,11 @@ class TestCase {
 	**/
 	function assertTrue( b:Bool, ?c : PosInfos ) : Void {
 		currentTest.done = true;
-		if (b != true){
+		if (b != true) {
 			currentTest.success = false;
 			currentTest.error   = "expected true but was false";
 			currentTest.posInfos = c;
+            trace("TestCase failed: " + currentTest.error + " @" + c.fileName + ":" + c.lineNumber);
 			throw currentTest;
 		}
 	}
@@ -113,4 +114,5 @@ class TestCase {
 			throw currentTest;
 		}
 	}
+
 }

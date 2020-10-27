@@ -22,6 +22,8 @@
 package haxe.unit;
 import haxe.PosInfos;
 
+#if tink_core using tink.CoreApi; #end
+
 /**
 	This unit test class should be extended to create test cases. Each test 
 	method created in this extended class should start with the name "test".
@@ -78,6 +80,7 @@ class TestCase {
 	/**
 		Succeeds if `b` is `true`.
 	**/
+	inline function assert( b:Bool, ?c : PosInfos ) : Void assertTrue(b, c);
 	function assertTrue( b:Bool, ?c : PosInfos ) : Void {
 		currentTest.done = true;
 		if (b != true) {
@@ -114,5 +117,49 @@ class TestCase {
 			throw currentTest;
 		}
 	}
+
+    // TODO
+    // function assertThrow( Void->Void   
+
+    #if tink_core
+    /**
+     * Test assertion, output error if failed.
+     */
+	function assertSuccess<T,U>( out:Outcome<T,U>, ?c : PosInfos ) : Void {
+		currentTest.done = true;
+        switch out {
+            case Success(_): 
+            case Failure(x): 
+                var s = Std.string(x);
+                if (Std.is(x, tink.core.Error))
+                currentTest.error = "assertSuccess failed: " + s + "\n" + cast(x, Error).callStack.toString();
+                else currentTest.error = "assertSuccess failed: " + s;
+                currentTest.posInfos = c;
+                trace("TestCase failed: " + currentTest.error + " @" + c.fileName + ":" + c.lineNumber);
+                throw currentTest;
+        }
+    }
+	function assertFailure<T,U>( out:Outcome<T,U>, ?c : PosInfos ) : Void {
+		currentTest.done = true;
+        switch out {
+            case Failure(_): 
+            case Success(_): 
+                currentTest.error = "assertFailure failed: the Outcome was expected to give a Failure but didnot";
+                currentTest.posInfos = c;
+                trace("TestCase failed: " + currentTest.error + " @" + c.fileName + ":" + c.lineNumber);
+                throw currentTest;
+        }
+    }
+
+	function failure( e:Error, ?c : PosInfos ) : Void {
+		currentTest.done = true;
+        var s = e.toString() + "\n" + e.callStack.toString();
+        currentTest.error = "assertSuccess failed: " + s;
+        currentTest.posInfos = c;
+        trace("TestCase failed: " + currentTest.error + " @" + c.fileName + ":" + c.lineNumber);
+        throw currentTest;
+    }
+
+    #end
 
 }

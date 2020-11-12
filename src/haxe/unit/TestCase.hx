@@ -58,8 +58,14 @@ class TestCase {
 	**/
 	public var currentTest : TestStatus;
 
-	public function new( ) {
-	}
+	public function new( ) {}
+
+    /**
+     * Overload subCases() to create a TestCase containing others,
+     *  similar to TestSuite in other frameworks.
+     */
+    public function subCases() : Iterable<haxe.unit.TestCase>
+        return [];
 
 	/**
 		Override this method to execute code before the test runs.
@@ -80,12 +86,14 @@ class TestCase {
 	/**
 		Succeeds if `b` is `true`.
 	**/
-	inline function assert( b:Bool, ?c : PosInfos ) : Void assertTrue(b, c);
-	function assertTrue( b:Bool, ?c : PosInfos ) : Void {
+	inline function assert( b:Bool, ?msg:String, ?c : PosInfos ) : Void assertTrue(b, c);
+	function assertTrue( b:Bool, ?msg:String, ?c : PosInfos ) : Void {
 		currentTest.done = true;
 		if (b != true) {
 			currentTest.success = false;
 			currentTest.error   = "expected true but was false";
+            if (msg != null)
+                currentTest.error = currentTest.error + ' (${msg})';
 			currentTest.posInfos = c;
             trace("TestCase failed: " + currentTest.error + " @" + c.fileName + ":" + c.lineNumber);
 			throw currentTest;

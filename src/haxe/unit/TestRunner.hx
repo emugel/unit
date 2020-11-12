@@ -23,6 +23,8 @@ package haxe.unit;
 import Reflect;
 
 /**
+    extension of the legacy haxe.unit package.
+
 	This class runs unit test cases and prints the result.
 	
 	```haxe
@@ -35,6 +37,13 @@ import Reflect;
 	```
 	
 	@see <https://haxe.org/manual/std-unit-testing.html>
+
+    Extensions:
+
+    - cases, by overriding TestCase.subCases() may create 
+      subcases of others. Then runner.add(case); will also 
+      add its subcases (this allows what other framework call TestSuite).
+    - traces have been improved.
 **/
 class TestRunner {
 	/**
@@ -112,9 +121,12 @@ class TestRunner {
 
 	/**
 		Add TestCase instances to the unit test.
+
 	**/
 	public function add( c:TestCase ) : Void{
 		cases.add(c);
+        for (subcase in c.subCases())
+            cases.add(subcase);
 	}
 
 	/**

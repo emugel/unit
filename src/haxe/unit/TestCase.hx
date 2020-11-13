@@ -66,6 +66,25 @@ class TestCase {
      */
     public function subCases() : Iterable<haxe.unit.TestCase>
         return [];
+    
+    /**
+     * OS temp location, ($TEMP, or
+     * "/tmp/" or "." whichever works first).
+     */
+    public function tempLocation() : String {
+#if sys
+        var tmp = Sys.getEnv("TEMP");
+        return haxe.io.Path.addTrailingSlash(
+            if (tmp != null 
+                && tmp.length > 0 
+                && sys.FileSystem.isDirectory(tmp)) tmp
+            else if (sys.FileSystem.isDirectory("/tmp")) "/tmp"
+            else "."
+        );
+#else
+        return haxe.io.Path.addTrailingSlash(".");
+#end
+    }
 
 	/**
 		Override this method to execute code before the test runs.

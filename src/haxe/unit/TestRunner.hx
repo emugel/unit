@@ -44,6 +44,8 @@ import Reflect;
       subcases of others. Then runner.add(case); will also 
       add its subcases (this allows what other framework call TestSuite).
     - traces have been improved.
+    - TestCase.tempLocation() gives OS temporary path location ($TEMP, or
+    "/tmp/" or "." whichever works first)
 **/
 class TestRunner {
 	/**

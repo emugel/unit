@@ -1,6 +1,6 @@
 /*
  * Copyright (C)2005-2017 Haxe Foundation
- *
+ *TestCase
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
@@ -62,11 +62,13 @@ class TestCase {
 
     /**
      * Overload subCases() to create a TestCase containing others,
-     *  similar to TestSuite in other frameworks.
+     *  similar to TestSuite in other frameworks. All the tests defined 
+     *  in those classes will be run.
+     * @see assertTests() to pick up only certain tests of certain class(es)
      */
     public function subCases() : Iterable<haxe.unit.TestCase>
         return [];
-    
+
     /**
      * OS temp location, ($TEMP, or
      * "/tmp/" or "." whichever works first).

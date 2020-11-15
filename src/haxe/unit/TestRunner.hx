@@ -1,55 +1,19 @@
-/*
- * Copyright (C)2005-2017 Haxe Foundation
- *
- * Permission is hereby granted, free of charge, to any person obtaining a
- * copy of this software and associated documentation files (the "Software"),
- * to deal in the Software without restriction, including without limitation
- * the rights to use, copy, modify, merge, publish, distribute, sublicense,
- * and/or sell copies of the Software, and to permit persons to whom the
- * Software is furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
- * DEALINGS IN THE SOFTWARE.
- */
 package haxe.unit;
+
 import Reflect;
 
 /**
-    extension of the legacy haxe.unit package.
-
-	This class runs unit test cases and prints the result.
-	
-	```haxe
-	var r = new haxe.unit.TestRunner();
-	r.add(new MyTestCase());
-	// add other TestCases here
-	
-	// finally, run the tests
-	r.run();
-	```
-	
-	@see <https://haxe.org/manual/std-unit-testing.html>
-
-    Extensions:
-
-    - cases, by overriding TestCase.subCases() may create 
-      subcases of other TestCase objects. Then runner.add(case); will also 
-      add its subcases (this allows what other framework call TestSuite).
-    - individual tests of other TestCase (and not entire TestCase objects as in
-      the previous list item described) may also be included. See
-      `haxe.unit.macros.CherryPick.assertTests()`.
-    - traces have been improved.
-    - TestCase.tempLocation() gives OS temporary path location ($TEMP, or
-      "/tmp/" or "." whichever works first)
-**/
+ * This class runs unit test cases and prints the result.
+ * ```haxe
+ * var r = new haxe.unit.TestRunner();
+ * r.add(new MyTestCase());
+ * // add other TestCases here
+ * 
+ * // finally, run the tests
+ * r.run();
+ * ```
+ * @see <https://haxe.org/manual/std-unit-testing.html>
+*/
 class TestRunner {
 
 	// The unit test results. 

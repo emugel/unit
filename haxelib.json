@@ -9,8 +9,8 @@
   "contributors": [
     "emugel"
   ],
-  "releasenote": "from haxe 3",
-  "version": "1.0.0",
+  "releasenote": "add README.md",
+  "version": "1.0.1",
   "url": "",
   "dependencies": {
   }

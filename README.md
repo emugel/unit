@@ -18,11 +18,16 @@ import libxyz.test.*;
 class TestLibxyz extends haxe.unit.TestCase {
     public override function subCases() : Iterable<haxe.unit.TestCase>
         return [ 
-            new libxyz.test.TestSimple(), 
-            new libxyz.test.TestAdvanced() 
+            new libxyz.test.TestA(), 
+            new libxyz.test.TestB(),
+            new libxyz.test.TestC() 
         ];
 }
 ```
+
+Testing TestLibxyz will then run all tests from `TestA`, `TestB` and `TestC`.
+The following feature is more selective.
+
 # A test that run other tests
 
 A different use case from the above, even though at 1st glance seems similar.

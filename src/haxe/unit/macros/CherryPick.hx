@@ -19,9 +19,8 @@ class CherryPick {
      *      );
      * }
      * @endexample
-     * @param (ExprOf<TestCase>) There is no enforcement of the type by 
-     *             the macro so this is indicative, but you will pass `this`
-     *             here (from a class extending TestCase)
+     * @param (ExprOf<TestCase>) You must pass `this` here (you always call
+     *             this from a TestCase). 
      * @param () - There is no [] even though it's an array (because macro)
      *           - You have to use notation `new pack.Classname().test_xxx`,
      *             It is a way to make sure the classname with given
@@ -31,16 +30,25 @@ class CherryPick {
      *             error in case assertions inside the picked up test(s)
      *             fail.
      *
-     * @see subCases() for running ALL tests of certain class(es) instead.
+     * @see TestCase.subCases() to run ALL tests of certain class(es) instead.
      */
-    public static macro function assertTests(thisTestCase:haxe.macro.ExprOf<haxe.unit.TestCase>, a:Array<haxe.macro.Expr>) {
+    public static macro function assertTests(
+        thisTestCase : haxe.macro.ExprOf<haxe.unit.TestCase>,
+        a            : Array<haxe.macro.Expr>
+    ) {
         try {
             if (thisTestCase.toString() != "this")
-                throw "When using `haxe.unit.macros.assertTests(this, ...)`, please don't forget the `this`";
+                throw "When using `haxe.unit.macros.assertTests(this, ...)`, 
+                    please don't forget the `this`";
             var a : Array<{ className:String, methName: String }> =
-                haxe.unit.macros.CherryPick.extract_and_check_existence_of_classes_and_method_names(a);
+                haxe.unit.macros
+                 .CherryPick
+                 .extract_and_check_existence_of_classes_and_method_names(a);
             return macro for (o in $v{a}) {
-                var caseTest = Type.createInstance(Type.resolveClass(o.className), []);
+                var caseTest = Type.createInstance(
+                    Type.resolveClass(o.className), 
+                    []
+                );
                 var oldClassname = caseTest.currentTest;
                 caseTest.currentTest = $thisTestCase.currentTest;
                 caseTest.currentTest.classname = o.className;
@@ -55,7 +63,13 @@ class CherryPick {
                 caseTest.currentTest = oldClassname;
             }
         }
-        catch (d:Dynamic) { Context.fatalError(Std.string(d), Context.currentPos()); return macro null; }
+        catch (d:Dynamic) { 
+            Context.fatalError(
+                Std.string(d), 
+                Context.currentPos()
+            ); 
+            return macro null; 
+        }
     }
     
     /**
@@ -86,7 +100,8 @@ class CherryPick {
         return a.map( function(e) {
                 var er = ~/new ([a-zA-Z0-9._]*)\(\)\.(test[a-zA-Z0-9_]*)/;
                 if (!er.match(e.toString())) {
-                    throw '${e.toString()} didn\'t match a format such as new pack.ClassName.test_foo'; 
+                    throw '${e.toString()} didn\'t match a format 
+                            such as new pack.ClassName.test_foo'; 
                 }
                 else {
                     var o = {
@@ -95,13 +110,21 @@ class CherryPick {
                     }
                     var t;
                     try t = Context.getType(o.className)
-                    catch (d:Dynamic) throw "`" + e.toString() + "`: " + Std.string(d);
+                    catch (d:Dynamic) throw "`" + e.toString() + "`: " 
+                                         + Std.string(d);
                     switch t {
                         case TInst(refClassType, aArgs):
-                            if (TypeTools.findField(refClassType.get(), o.methName) == null)
-                                throw "`new "+o.className+"()."+o.methName +"`: Class " + o.className + " found, but it has no method called " + o.methName; 
+                            if (TypeTools.findField(
+                                    refClassType.get(), 
+                                    o.methName
+                            ) == null)
+                                throw "`new " +o.className+"()." +o.methName 
+                                    +"`: Class " + o.className 
+                                    + " found, but it has no method called " 
+                                    + o.methName; 
                         case _:
-                            throw "`new "+o.className+"()."+o.methName +"`: Class " + o.className + " not found";
+                            throw "`new "+o.className+"()."+o.methName 
+                                +"`: Class " + o.className + " not found";
                     }
                     return o;
                 }

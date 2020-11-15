@@ -7,10 +7,7 @@ In addition to the very slightly improved output, there are a few new capabiliti
 ## TestCase of TestCases
 
 Imagine a `libxyz` that comes with its own `TestCase` files (`TestA`, `TestB`, `TestC`).
-It is possible to create a `TestLibxyz` that will have all 3 above cases and all their tests,
-in a similar way to TestSuite in other frameworks. This allows for example a user of `libxyz` 
-to simply add the `TestLibxyz` in its package and therefore duplicate the tests of `libxyz` 
-there if that's what wanted (usually this is not the case).
+It is trivial to create a `TestLibxyz` that will have all 3 above cases and all their tests.
 
 To do this, you would simply override `subCases()`:
 
@@ -26,9 +23,9 @@ class TestLibxyz extends haxe.unit.TestCase {
         ];
 }
 ```
-# Have a test, run other tests
+# A test that run other tests
 
-A different use case from the above, even though it seems similar at first glance.
+A different use case from the above, even though at 1st glance seems similar.
 
 You may for instance have a production server that needs to run a small **subset**
 of tests each time it starts, *not entire TestCases*, but only the very critical tests.
@@ -46,9 +43,9 @@ of tests each time it starts, *not entire TestCases*, but only the very critical
     - test_equinodermata        // critical
 ```
 
-Now we could define `TestCritical` like so:
+To do so, we can write the following `TestCritical` class.
 ```haxe
-package entirely.different.package;
+package myownpackage;
 
 class TestCritical {
     public function test_critical_precious_in_production() : Void {
@@ -57,13 +54,13 @@ class TestCritical {
             new libabc.test.TestA().test_alphabet,
             new libabc.test.TestB().test_berlin,
             new libabc.test.TestA().test_equinodermata,
-            new entirely.different.package.test.TestZ().test_server_has_qualified_name
+            new different.one.test.TestZ().test_server_has_qualified_name
         );
     } 
 }
 ```
 
-This way there is no need to recopy the tests (and even though it's a macro,
+This way there is no need to recopy the tests code (and even though it's a macro,
 the macro don't duplicate the code either), and existence of the classes and
 referenced tests is done at compile-time.
 
@@ -84,8 +81,7 @@ to have, in addition to the above switches:
 * `-a` :: to run all the tests (by default it should show a mere list of test cases)
 * `-l` :: to list all tests in a TestCase.
 
-Here are some examples (for a compiled binary called `xxx`):
-
+Here are some examples (for a compiled binary called `foo`):
 ```bash
 foo                            # show help and list TestCases
 foo TestBar                    # run all tests in TestBar 

@@ -50,7 +50,8 @@ class TestCase {
 
     /**
      * OS temp location, ($TEMP, or
-     * "/tmp/" or "." whichever works first).
+     * "/tmp" or "." whichever works first)
+     * followed by a trailing slash.
      */
     public function tempLocation() : String {
 #if sys
@@ -126,8 +127,21 @@ class TestCase {
 		}
 	}
 
-    // TODO
-    // function assertThrow( Void->Void   
+    function assertThrows( cb:Void->Void, ?pos:haxe.PosInfos ) : Void {
+		currentTest.done = true;
+        var failed = false;
+        try {
+            cb();
+            failed = true;
+        }
+        catch (e) 1;
+        if (failed) {
+            currentTest.error = "assertThrows didn't throw. Oops.";
+            currentTest.posInfos = pos;
+            trace("TestCase failed: " + currentTest.error + " @" + pos.fileName + ":" + pos.lineNumber);
+            throw currentTest;
+        }
+    }
 
     #if tink_core
     /**
